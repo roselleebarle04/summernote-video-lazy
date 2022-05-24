@@ -1,6 +1,6 @@
 {
-    "name": "taalendigitaal/summernote-audio",
-    "description": "A Summernote plugin that adds a button to insert audio by URL or file upload.",
+    "name": "qrtiger/summernote-video-lazy",
+    "description": "A Summernote plugin that adds a button to lazy insert a youtube video.",
     "type": "component",
     "require": {
         "robloach/component-installer": "*"
@@ -8,10 +8,10 @@
     "extra": {
         "component": {
             "styles": [
-                "summernote-audio.css"
+                "summernote-video-lazy.css"
             ],
             "scripts": [
-                "summernote-audio.js"
+                "summernote-video-lazy.js"
             ]
         }
     }

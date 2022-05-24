@@ -1,9 +1,9 @@
 /**
- * 
- * copyright 2018 [Taal & Digitaal | Hendri Smit].
- * email: hen3smit@gmail.com
+ *
+ * copyright 2022 [QRTIGER | Roselle Ebarle].
+ * email: roselle@qrtiger.com
  * license: MIT
- * 
+ *
  */
 (function (factory) {
     /* Global define */
@@ -21,29 +21,19 @@
     $.extend(true, $.summernote.lang, {
         'en-US': {
             audio: {
-                audio: 'Audio',
-                insert: 'Insert Audio',
+                audio: 'Lazy Video',
+                insert: 'Insert Video',
                 selectFromFiles: 'Select from files',
-                url: 'Audio URL',
+                url: 'Youtube Video ID',
                 maximumFileSize: 'Maximum file size',
                 maximumFileSizeError: 'Maximum file size exceeded.'
-            }
-        },
-        'nl-NL': {
-            audio: {
-                audio: 'Audio',
-                insert: 'Audio invoegen',
-                selectFromFiles: 'Selecteer een bestand',
-                url: 'URL van de audio',
-                maximumFileSize: 'Maximale bestandsgrootte',
-                maximumFileSizeError: 'Bestand te groot.'
             }
         },
     });
 
     $.extend($.summernote.options, {
         audio: {
-            icon: '<i class="note-icon-audio"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 75 75" width="12px" height="12px"><g id="g1"><polygon id="polygon1" points="39.389,13.769 22.235,28.606 6,28.606 6,47.699 21.989,47.699 39.389,62.75 39.389,13.769" style="stroke:#111111;stroke-width:5;stroke-linejoin:round;fill:#111111;" /><path id="path1" d="M 48.128,49.03 C 50.057,45.934 51.19,42.291 51.19,38.377 C 51.19,34.399 50.026,30.703 48.043,27.577" style="fill:none;stroke:#111111;stroke-width:5;stroke-linecap:round"/><path id="path2" d="M 55.082,20.537 C 58.777,25.523 60.966,31.694 60.966,38.377 C 60.966,44.998 58.815,51.115 55.178,56.076" style="fill:none;stroke:#111111;stroke-width:5;stroke-linecap:round"/><path id="path1" d="M 61.71,62.611 C 66.977,55.945 70.128,47.531 70.128,38.378 C 70.128,29.161 66.936,20.696 61.609,14.01" style="fill:none;stroke:#111111;stroke-width:5;stroke-linecap:round"/></g></svg></i>'
+            icon: '<i class="note-icon-audio"><svg fill="#000000" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 30 30" width="12px" height="12px">    <path d="M 15 4 C 10.814 4 5.3808594 5.0488281 5.3808594 5.0488281 L 5.3671875 5.0644531 C 3.4606632 5.3693645 2 7.0076245 2 9 L 2 15 L 2 15.001953 L 2 21 L 2 21.001953 A 4 4 0 0 0 5.3769531 24.945312 L 5.3808594 24.951172 C 5.3808594 24.951172 10.814 26.001953 15 26.001953 C 19.186 26.001953 24.619141 24.951172 24.619141 24.951172 L 24.621094 24.949219 A 4 4 0 0 0 28 21.001953 L 28 21 L 28 15.001953 L 28 15 L 28 9 A 4 4 0 0 0 24.623047 5.0546875 L 24.619141 5.0488281 C 24.619141 5.0488281 19.186 4 15 4 z M 12 10.398438 L 20 15 L 12 19.601562 L 12 10.398438 z"/></svg></i>'
         },
         callbacks: {
             onAudioUpload: null,
@@ -104,12 +94,6 @@
 
                 // Build the Body HTML of the Dialog.
                 var body = [
-                    '<div class="form-group note-form-group note-group-select-from-files">',
-                    '<label class="note-form-label">' + lang.audio.selectFromFiles + '</label>',
-                    '<input class="note-audio-input note-form-control note-input" ',
-                    ' type="file" name="files" accept="audio/*" multiple="multiple" />',
-                    '</div>',
-                    audioLimitation,
                     '<div class="form-group note-group-image-url" style="overflow:auto;">',
                     '<label class="note-form-label">' + lang.audio.url + '</label>',
                     '<input class="note-audio-url form-control note-form-control note-input ',
@@ -180,27 +164,13 @@
             };
 
             this.createAudio = function (url) {
-                // audio url patterns (mp3, ogg)
-                var mp3RegExp = /^.+.(mp3)$/;
-                var mp3Match = url.match(mp3RegExp);
-
-                var oggRegExp = /^.+.(ogg|oga)$/;
-                var oggMatch = url.match(oggRegExp);
-
-                var base64RegExp = /^data:(audio\/mpeg|audio\/ogg).+$/;
-                var base64Match = url.match(base64RegExp);
-
-                var $audio;
-                if (mp3Match || oggMatch || base64Match) {
-                    $audio = $('<audio controls>')
-                            .attr('src', url);
-                } else {
-                    // this is not a known audio link. Now what, Cat? Now what?
-                    return false;
-                }
-
-                $audio.addClass('note-audio-clip');
-
+                var pluginBody = [
+                    '<div id="ytplaceholder">',
+                    '<img className="ytcover" loading="lazy" src="https://i.ytimg.com/vi_webp/' + url + '/maxresdefault.webp">',
+                    '<iframe id="ytiframe" data-src="https://www.youtube.com/embed/' + url + '"></iframe>',
+                    '</div>'
+                ]
+                var $audio = $(pluginBody.join(''))
                 return $audio;
             };
 
@@ -308,5 +278,22 @@
             };
         }
     });
+
+    var ytplaceholder = document.getElementById ('ytplaceholder');
+
+    var videolistner = function (e) {
+        var ytiframe = document.getElementById ('ytiframe');
+        ytiframe.src = ytiframe.getAttribute ('data-src');
+        ytiframe.onload = ytiframe.style.opacity=1;
+        ytplaceholder.removeEventListener ("mouseover", videolistner);
+    };
+
+    ytplaceholder.addEventListener ('mouseover', videolistner);
+
+    // show the YouTube video anyway after 3 seconds
+    setTimeout(function(){
+        videolistner();
+    },3000);
+
 }));
 

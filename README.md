@@ -8,8 +8,8 @@ Include the plugin script after including Summernote:
 ```html
 <!-- include jquery, bootstrap, summernote here -->
 
-<link rel="stylesheet" href="summernote-audio.css">
-<script type="text/javascript" src="summernote-audio.js"></script>
+<link rel="stylesheet" href="summernote-video-lazy.css">
+<script type="text/javascript" src="summernote-video-lazy.js"></script>
 ```
 
 ## Configuration
